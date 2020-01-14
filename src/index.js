@@ -39,6 +39,33 @@ var series = [];
   console.log(" getSeries item", item);
   if(clickMapId != "1"){
     series.push(
+    //   {
+    //     name: '调研路线',
+    //     type: 'effectScatter',
+    //     coordinateSystem: 'geo',
+    //     zlevel: 1,
+    //     rippleEffect: {
+    //         brushType: 'stroke'
+    //     },
+    //     label: {
+    //         show: true,
+    //         position: 'right',
+    //         formatter: '{b}'
+    //     },
+    //     symbolSize: function (val) {
+    //         return val[2]/5 ;
+    //     },
+    //     itemStyle: {
+    //         color: color[i]
+    //     },
+    //     data: item[1].map(function (dataItem) {
+    //       console.log(" getSeries dataItem", dataItem);
+    //         return {
+    //             name: dataItem[1].name.concat(dataItem[1].value),
+    //             value: geoCoordMap[dataItem[1].name].geo.concat([dataItem[1].value])
+    //         };
+    //     })
+    // },
       {
           name: '调研路线',
           type: 'effectScatter',
@@ -325,10 +352,10 @@ export default class ChinaMap extends Component {
     // data.features.forEach( item => {
     //   this.nameMapper[item.properties.name] = item.properties.adcode;
     // });
-    geoCoordMap = {};
+    // geoCoordMap = {};
     data.features.forEach( item => {
       geoCoordMap[item.properties.name] ={
-        geo: item.properties.center,
+        geo: item.properties.centroid||item.properties.center,
         adcode: item.properties.adcode
       } 
     });
@@ -429,7 +456,7 @@ export default class ChinaMap extends Component {
     // lastLevel 为true 说明是最后一级了
     if (params && params.name) {
       // const {data: {name, id, lastLevel}} = params;
-      let name = params.name;
+      let name = params.name.replace(/[0-9]+.*$/ig,"");;
       console.log(geoCoordMap, name, geoCoordMap[name])
       let id = geoCoordMap[name].adcode;
       let lastLevel = false;
